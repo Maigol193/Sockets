@@ -8,13 +8,11 @@
     <script src="/socket.io/socket.io.js"></script>
 </head>
 <body>
-    <h1>Chat</h1>
-    <div>
-        <div id="messages">
-            
-        </div>
-        <div>
-            <input id="message" type="text">
+    <h1 id="header">Chat</h1>
+    <div id="chatView">
+        <div id="messages"></div>
+        <div id="message-input">
+            <input id="message" type="text" placeholder="Escribe tu mensaje aquí...">
             <button id="trigger">Send</button>
         </div>
     </div>

@@ -1,8 +1,6 @@
 import express from 'express';
 import path from 'path';
-
 import { Server } from 'socket.io';
-//import socketIo from 'socket.io';
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -32,8 +30,15 @@ io.on('connection', (socket) => {
 
     socket.on('sendNewMessage', (data) => {
         console.log('Recibiste un mensaje: ', data);
-
         //socket.broadcast.emit('messageReceived', data); //a todos menos a mi
         socket.to('room-' + data.room).emit('messageReceived',data);
     });
+
+    socket.on('sendNewNotification', (data) => {
+        console.log('Recibiste un mensaje: ', data);
+        //socket.broadcast.emit('messageReceived', data); //a todos menos a mi
+        socket.to('room-' + data.room).emit('notificationReceived',data);
+    });
+
+    
 });
