@@ -4,7 +4,7 @@ const messageInput = document.getElementById('message');
 const roomId = window.location.href.split('/').pop();
 const username = sessionStorage.getItem("username");
 const chatView = document.getElementById("chatView");
-const home = "http://localhost:3000"
+const home = "https://sockets-eues.onrender.com" //http://localhost:3000
 
 if(!username){
     window.location.replace(home);
