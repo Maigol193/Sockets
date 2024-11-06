@@ -8,11 +8,11 @@ const port = process.env.PORT || 3000;
 app.use('', express.static(path.join(__dirname, '..', 'public')));
 
 app.get('', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'home.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'views', 'home.html'));
 });
 
 app.get('/chat/:id', (req, res) => {
-    res.sendFile(path.join(__dirname, 'views', 'chat.html'));
+    res.sendFile(path.join(__dirname, '..', 'public', 'views', 'chat.html'));
 });
 
 const server = app.listen(port, () => {

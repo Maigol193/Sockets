@@ -11,34 +11,38 @@ if(!username){
     alert("Please enter a username");
 }
 
-function createChatContent(tag, type, content){
+function createChatContent(tag, className, content) {
     const element = document.createElement(tag);
-    element.classType = type;
+    element.className = className; // Usamos className en lugar de classType
     element.textContent = content;
     return element;
 }
 
 function updateChat(data) {
     const chatContainer = document.getElementById('messages');
-    let chatContent;
 
     // Crear el contenido del mensaje basado en el tipo de data
     if (data.type === 0) {
-        // Mensaje propio
-        chatContent = createChatContent('div', 'own-message', `${data.username}: ${data.message}`);
-    } else if (data.type === 1) {
-        // Mensaje de otro
-        chatContent = createChatContent('div', 'other-message', `${data.username}: ${data.message}`);
+        // Mensaje propio o de otro usuario
+        const isOwnMessage = data.username === username;
+        const messageContainer = document.createElement('div');
+        const messageClass = isOwnMessage ? 'own-message' : 'other-message';
+        messageContainer.className = `message ${messageClass}`;
+
+        // Agregar el nombre del usuario en un elemento separado
+        const usernameElement = createChatContent('div', 'message-username', data.username);
+        messageContainer.appendChild(usernameElement);
+
+        // Agregar el contenido del mensaje en otro elemento
+        const messageElement = createChatContent('div', 'message-content', data.message);
+        messageContainer.appendChild(messageElement);
+
+        chatContainer.appendChild(messageContainer);
     } else if (data.type === 2) {
-        // Notificación
-        chatContent = createChatContent('div', 'notification', data.message);
+        // Notification
+        const notificationElement = createChatContent('div', 'notification', data.message);
+        chatContainer.appendChild(notificationElement);
     }
-
-    // Asignar clase según el tipo de mensaje
-    chatContent.classList.add(data.type);
-
-    // Agregar el mensaje al contenedor del chat
-    chatContainer.appendChild(chatContent);
 
     // Desplazar hacia abajo para ver el último mensaje
     chatContainer.scrollTop = chatContainer.scrollHeight;
@@ -70,6 +74,11 @@ socket.on('messageReceived', (data) => {
 socket.on('notificationReceived', (data) => {
     updateChat(data);
 });
+
+window.addEventListener('beforeunload', () => {
+    createMessage(username + " left the battle!", 2);
+    sessionStorage.removeItem("username");
+})
 
 document.getElementById('trigger').addEventListener('click', () => {
     const msg = messageInput.value;
